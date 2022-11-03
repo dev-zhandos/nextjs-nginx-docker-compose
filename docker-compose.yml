@@ -1,29 +1,22 @@
-version: '3.4'
+version: '3.8'
 
 services:
-  auth-backend:
-    build: 
-      context: ./auth-backend
-    ports:
-      - "3001:3001"
-    networks:
-      - dev
-  
   client: 
     build: 
       context: ./client
-    volumes:
-      - staticbuild:/app/out
+    hostname: nodejsserver
+    ports:
+      - "3000:3000" 
     networks:
       - dev
   
   nginx:
     build:
       context: ./nginx
-    volumes:
-      - staticbuild:/app/public
+    depends_on:
+      - client
     ports: 
-      - "8080:80"
+      - "80:80"
     networks:
       - dev
 
@@ -31,5 +24,4 @@ networks:
   dev:
     driver: bridge
 
-volumes:
-  staticbuild:
+
